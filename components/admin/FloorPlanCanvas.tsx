@@ -13,7 +13,7 @@ import { Users, Edit2, Trash2, CheckCircle, Clock, Ban, UserCheck, MoveHorizonta
 
 export interface TableItem {
   _id: string;
-  tableNumber: string;
+  tableNumber: string; 
   capacity: number;
   type?: string;
   zone: string;
