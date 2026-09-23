@@ -44,11 +44,11 @@ export default function AdminContentPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
-            <FileText className="w-6 h-6 text-amber-400" />
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <FileText className="w-6 h-6 text-amber-600" />
             <span>CMS Rich Content Editor</span>
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             Edit public site content pages (About Us, Privacy Policy, Terms & Conditions) with Jodit WYSIWYG editor.
           </p>
         </div>
@@ -56,7 +56,7 @@ export default function AdminContentPage() {
         <button
           onClick={handleSave}
           disabled={saving || loading}
-          className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs rounded-xl transition shadow disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs rounded-xl transition shadow-xs disabled:opacity-50 cursor-pointer"
         >
           <Save className="w-4 h-4" />
           <span>{saving ? 'Publishing...' : 'Publish Content'}</span>
@@ -64,7 +64,7 @@ export default function AdminContentPage() {
       </div>
 
       {/* Page Tabs */}
-      <div className="flex items-center gap-2 p-1.5 bg-slate-900 border border-slate-800 rounded-2xl w-fit">
+      <div className="flex items-center gap-2 p-1.5 bg-white border border-slate-200 rounded-2xl w-fit shadow-xs">
         {[
           { key: 'about-us', label: 'About Us' },
           { key: 'privacy-policy', label: 'Privacy Policy' },
@@ -75,8 +75,8 @@ export default function AdminContentPage() {
             onClick={() => setSelectedType(tab.key as any)}
             className={`px-5 py-2 rounded-xl text-xs font-bold transition ${
               selectedType === tab.key
-                ? 'bg-amber-400 text-slate-950 shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-amber-500 text-slate-950 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             {tab.label}
@@ -85,13 +85,13 @@ export default function AdminContentPage() {
       </div>
 
       {/* Editor Container */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+      <div className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-xs space-y-4">
         {loading ? (
-          <div className="h-96 flex items-center justify-center text-slate-500 text-sm">
+          <div className="h-96 flex items-center justify-center text-slate-400 text-sm">
             Loading editor and content...
           </div>
         ) : (
-          <div className="text-slate-900">
+          <div className="text-slate-900 bg-white rounded-2xl overflow-hidden border border-slate-200">
             <JoditComponent content={content} setContent={setContent} />
           </div>
         )}

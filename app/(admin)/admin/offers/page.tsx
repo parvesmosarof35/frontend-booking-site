@@ -151,18 +151,18 @@ export default function AdminOffersPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-amber-400" />
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <Sparkles className="w-6 h-6 text-amber-600" />
             <span>Promotions & Vouchers Management</span>
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             Create discount campaigns, promo codes, and configure automated percentage or flat rate deductions.
           </p>
         </div>
 
         <button
           onClick={handleOpenAdd}
-          className="flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition shadow"
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs rounded-xl transition shadow-xs cursor-pointer"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>New Promotion</span>
@@ -171,173 +171,179 @@ export default function AdminOffersPage() {
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {offers.map((offer) => (
-          <div
-            key={offer._id}
-            className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl flex flex-col justify-between"
-          >
-            <div>
-              <div className="relative h-40 bg-slate-950">
-                <img
-                  src={offer.imageUrl || 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400'}
-                  alt={offer.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 left-3 bg-amber-500 text-slate-950 font-bold text-xs px-3 py-0.5 rounded-full shadow">
-                  {offer.discountType === 'percentage' ? `${offer.value}% OFF` : `৳${offer.value} FLAT`}
-                </div>
-                <div
-                  className={`absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    offer.isActive
-                      ? 'bg-emerald-950/90 text-emerald-300 border border-emerald-500/40'
-                      : 'bg-slate-900/90 text-slate-400 border border-slate-700'
-                  }`}
-                >
-                  {offer.isActive ? 'Active' : 'Inactive'}
-                </div>
-              </div>
-
-              <div className="p-5 space-y-2">
-                <h3 className="font-serif text-base font-bold text-white">{offer.title}</h3>
-                <p className="text-xs text-slate-400 line-clamp-2">{offer.description}</p>
-                {offer.promoCode && (
-                  <div className="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800 w-fit">
-                    Code: {offer.promoCode}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="p-5 pt-0 flex items-center justify-between border-t border-slate-800 mt-2">
-              <span className="text-[11px] text-slate-500">
-                {offer.validFrom} - {offer.validTo}
-              </span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleOpenEdit(offer)}
-                  className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-400 rounded-lg transition"
-                >
-                  <Edit2 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => handleDelete(offer._id)}
-                  className="p-1.5 bg-slate-800 hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 rounded-lg transition"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+        {offers.length === 0 ? (
+          <div className="col-span-full py-16 text-center text-slate-500 bg-white border border-slate-200 rounded-3xl shadow-xs">
+            No promotional campaigns found.
           </div>
-        ))}
+        ) : (
+          offers.map((offer) => (
+            <div
+              key={offer._id}
+              className="bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition flex flex-col justify-between"
+            >
+              <div>
+                <div className="relative h-40 bg-slate-100">
+                  <img
+                    src={offer.imageUrl || 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400'}
+                    alt={offer.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-3 left-3 bg-amber-500 text-slate-950 font-bold text-xs px-3 py-0.5 rounded-full shadow-xs">
+                    {offer.discountType === 'percentage' ? `${offer.value}% OFF` : `৳${offer.value} FLAT`}
+                  </div>
+                  <div
+                    className={`absolute top-3 right-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                      offer.isActive
+                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
+                        : 'bg-slate-100 text-slate-600 border border-slate-300'
+                    }`}
+                  >
+                    {offer.isActive ? 'Active' : 'Inactive'}
+                  </div>
+                </div>
+
+                <div className="p-5 space-y-2">
+                  <h3 className="font-serif text-base font-bold text-slate-900">{offer.title}</h3>
+                  <p className="text-xs text-slate-500 line-clamp-2">{offer.description}</p>
+                  {offer.promoCode && (
+                    <div className="text-xs font-mono font-bold text-amber-900 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200 w-fit">
+                      Code: {offer.promoCode}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-5 pt-0 flex items-center justify-between border-t border-slate-100 mt-2">
+                <span className="text-[11px] text-slate-500">
+                  {offer.validFrom} - {offer.validTo}
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleOpenEdit(offer)}
+                    className="p-1.5 bg-slate-100 hover:bg-amber-50 text-slate-600 hover:text-amber-800 rounded-lg border border-slate-200/80 transition"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(offer._id)}
+                    className="p-1.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 rounded-lg border border-slate-200/80 transition"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-          <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+          <div className="w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-bold text-slate-900">
                 {editingOffer ? 'Edit Promotion' : 'Create Promotion'}
               </h3>
-              <button onClick={() => setModalOpen(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setModalOpen(false)} className="text-slate-400 hover:text-slate-700">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleSaveOffer} className="space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">Campaign Title *</label>
+                <label className="block font-semibold text-slate-700 mb-1">Campaign Title *</label>
                 <input
                   type="text"
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Grand Weekend 20% Off"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">Description</label>
+                <label className="block font-semibold text-slate-700 mb-1">Description</label>
                 <textarea
                   rows={2}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Terms, discount details, restrictions..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400 resize-none"
+                  className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition resize-none"
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Discount Type</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Discount Type</label>
                   <select
                     value={discountType}
                     onChange={(e) => setDiscountType(e.target.value as any)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                   >
                     <option value="percentage">Percentage (%)</option>
                     <option value="flat">Flat Amount (৳)</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Value *</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Value *</label>
                   <input
                     type="number"
                     min={1}
                     required
                     value={value}
                     onChange={(e) => setValue(parseFloat(e.target.value))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Promo Code</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Promo Code</label>
                   <input
                     type="text"
                     value={promoCode}
                     onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
                     placeholder="e.g. ROYAL20"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono uppercase focus:outline-none focus:border-amber-400"
+                    className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-mono uppercase focus:outline-none focus:border-amber-500 focus:bg-white transition"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Valid From</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Valid From</label>
                   <input
                     type="date"
                     required
                     value={validFrom}
                     onChange={(e) => setValidFrom(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Valid To</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Valid To</label>
                   <input
                     type="date"
                     required
                     value={validTo}
                     onChange={(e) => setValidTo(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                   />
                 </div>
               </div>
 
               {/* Banner Upload */}
               <div className="space-y-2">
-                <label className="block font-semibold text-slate-300">Banner Image</label>
+                <label className="block font-semibold text-slate-700">Banner Image</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={imageUrl}
                     onChange={(e) => setImageUrl(e.target.value)}
                     placeholder="https://... or upload"
-                    className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                    className="flex-1 bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                   />
-                  <label className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl cursor-pointer flex items-center gap-1.5 shrink-0">
+                  <label className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl cursor-pointer flex items-center gap-1.5 shrink-0 border border-slate-300 transition">
                     <Upload className="w-3.5 h-3.5" />
                     <span>{uploading ? '...' : 'Upload'}</span>
                     <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
@@ -346,28 +352,28 @@ export default function AdminOffersPage() {
               </div>
 
               <div className="pt-2">
-                <label className="flex items-center gap-2 cursor-pointer bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                <label className="flex items-center gap-2 cursor-pointer bg-slate-50 p-2.5 rounded-xl border border-slate-200">
                   <input
                     type="checkbox"
                     checked={isActive}
                     onChange={(e) => setIsActive(e.target.checked)}
                     className="w-4 h-4 text-amber-500 rounded"
                   />
-                  <span className="font-semibold text-slate-300">Campaign Active</span>
+                  <span className="font-semibold text-slate-700">Campaign Active</span>
                 </label>
               </div>
 
-              <div className="pt-3 flex justify-end gap-2">
+              <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl"
+                  className="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-xs transition"
                 >
                   Save Offer
                 </button>

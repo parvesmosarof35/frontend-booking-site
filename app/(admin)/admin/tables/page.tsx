@@ -68,10 +68,11 @@ export default function TablesManagerPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            Tables & Capacity Manager
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <MapPin className="w-6 h-6 text-amber-600" />
+            <span>Tables & Capacity Manager</span>
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             View all tables across venue dining zones and toggle real-time availability.
           </p>
         </div>
@@ -81,10 +82,10 @@ export default function TablesManagerPage() {
             <button
               key={z}
               onClick={() => setZoneFilter(z)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
                 zoneFilter === z
-                  ? 'bg-amber-400 text-slate-950 shadow'
-                  : 'bg-slate-900 text-slate-400 border border-slate-800'
+                  ? 'bg-amber-500 text-slate-950 shadow-xs'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               {z}
@@ -94,10 +95,10 @@ export default function TablesManagerPage() {
       </div>
 
       {/* Table List Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+      <div className="bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-950 text-slate-400 uppercase tracking-wider border-b border-slate-800 font-bold">
+            <thead className="bg-slate-50 text-slate-700 uppercase tracking-wider border-b border-slate-200 font-bold">
               <tr>
                 <th className="py-4 px-6">Table Number</th>
                 <th className="py-4 px-6">Zone</th>
@@ -107,53 +108,61 @@ export default function TablesManagerPage() {
                 <th className="py-4 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 text-slate-300">
-              {tables.map((table) => (
-                <tr key={table._id} className="hover:bg-slate-800/30 transition">
-                  <td className="py-4 px-6 font-bold text-white flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-400" />
-                    <span>{table.tableNumber}</span>
-                    <span className="text-[10px] text-slate-500 font-normal">({table.type || 'Standard'})</span>
-                  </td>
-                  <td className="py-4 px-6 font-medium">{table.zone}</td>
-                  <td className="py-4 px-6">
-                    <span className="flex items-center gap-1 font-semibold text-slate-200">
-                      <Users className="w-3.5 h-3.5 text-amber-400" />
-                      {table.capacity} Persons
-                    </span>
-                  </td>
-                  <td className="py-4 px-6 capitalize">{table.shape}</td>
-                  <td className="py-4 px-6">
-                    <select
-                      value={table.status}
-                      onChange={(e) => handleStatusChange(table._id, e.target.value)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold border focus:outline-none ${
-                        table.status === 'available'
-                          ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300'
-                          : table.status === 'reserved'
-                          ? 'bg-amber-950/80 border-amber-500/50 text-amber-300'
-                          : table.status === 'occupied'
-                          ? 'bg-rose-950/80 border-rose-500/50 text-rose-300'
-                          : 'bg-slate-900 border-slate-700 text-slate-400'
-                      }`}
-                    >
-                      <option value="available">Available</option>
-                      <option value="reserved">Reserved</option>
-                      <option value="occupied">Occupied</option>
-                      <option value="maintenance">Maintenance</option>
-                    </select>
-                  </td>
-                  <td className="py-4 px-6 text-right">
-                    <button
-                      onClick={() => handleDelete(table._id)}
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition"
-                      title="Delete Table"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+            <tbody className="divide-y divide-slate-100 text-slate-700">
+              {tables.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-slate-500">
+                    No tables found for the selected zone.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                tables.map((table) => (
+                  <tr key={table._id} className="hover:bg-slate-50/70 transition">
+                    <td className="py-4 px-6 font-bold text-slate-900 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-amber-500" />
+                      <span>{table.tableNumber}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">({table.type || 'Standard'})</span>
+                    </td>
+                    <td className="py-4 px-6 font-medium text-slate-700">{table.zone}</td>
+                    <td className="py-4 px-6">
+                      <span className="flex items-center gap-1 font-semibold text-slate-800">
+                        <Users className="w-3.5 h-3.5 text-amber-600" />
+                        {table.capacity} Persons
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 capitalize text-slate-600">{table.shape}</td>
+                    <td className="py-4 px-6">
+                      <select
+                        value={table.status}
+                        onChange={(e) => handleStatusChange(table._id, e.target.value)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold border focus:outline-none capitalize ${
+                          table.status === 'available'
+                            ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
+                            : table.status === 'reserved'
+                            ? 'bg-amber-50 border-amber-300 text-amber-800'
+                            : table.status === 'occupied'
+                            ? 'bg-rose-50 border-rose-300 text-rose-800'
+                            : 'bg-slate-100 border-slate-300 text-slate-600'
+                        }`}
+                      >
+                        <option value="available">Available</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="occupied">Occupied</option>
+                        <option value="maintenance">Maintenance</option>
+                      </select>
+                    </td>
+                    <td className="py-4 px-6 text-right">
+                      <button
+                        onClick={() => handleDelete(table._id)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                        title="Delete Table"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

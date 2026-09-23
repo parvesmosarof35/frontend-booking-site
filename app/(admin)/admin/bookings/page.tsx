@@ -73,11 +73,11 @@ export default function BookingsManagerPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
-            <CalendarCheck className="w-6 h-6 text-amber-400" />
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <CalendarCheck className="w-6 h-6 text-amber-600" />
             <span>Table Reservations Dashboard</span>
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             Real-time live guest booking board with instant seating transitions and WhatsApp contact triggers.
           </p>
         </div>
@@ -87,19 +87,19 @@ export default function BookingsManagerPage() {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400"
+            className="bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-amber-500 shadow-xs"
           />
           {selectedDate && (
             <button
               onClick={() => setSelectedDate('')}
-              className="text-xs text-slate-400 hover:text-white"
+              className="text-xs text-slate-500 hover:text-slate-800 font-medium"
             >
               Clear Date
             </button>
           )}
           <button
             onClick={fetchBookings}
-            className="p-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-800"
+            className="p-2 bg-white hover:bg-slate-100 text-slate-700 rounded-xl border border-slate-200 shadow-xs"
             title="Refresh Bookings"
           >
             <RefreshCw className="w-4 h-4" />
@@ -115,8 +115,8 @@ export default function BookingsManagerPage() {
             onClick={() => setStatusFilter(st)}
             className={`px-4 py-2 rounded-xl text-xs font-bold capitalize transition whitespace-nowrap ${
               statusFilter === st
-                ? 'bg-amber-400 text-slate-950 shadow'
-                : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-white'
+                ? 'bg-amber-500 text-slate-950 shadow-xs'
+                : 'bg-white text-slate-600 border border-slate-200 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             {st}
@@ -127,61 +127,61 @@ export default function BookingsManagerPage() {
       {/* MOBILE RESPONSIVE CARDS (Visible on mobile screens) */}
       <div className="block sm:hidden space-y-4">
         {bookings.length === 0 ? (
-          <div className="p-8 text-center text-slate-500 bg-slate-900 border border-slate-800 rounded-3xl">
+          <div className="p-8 text-center text-slate-500 bg-white border border-slate-200 rounded-3xl shadow-xs">
             No reservations found.
           </div>
         ) : (
           bookings.map((booking) => (
             <div
               key={booking._id}
-              className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3 shadow-lg"
+              className="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-xs"
             >
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
                 <div>
-                  <span className="font-mono font-bold text-amber-400 text-xs block">
+                  <span className="font-mono font-bold text-amber-700 text-xs block">
                     {booking.bookingReference || 'HOLD-TEMP'}
                   </span>
-                  <span className="text-[10px] text-slate-400 flex items-center gap-1">
+                  <span className="text-[10px] text-slate-500 flex items-center gap-1">
                     <Calendar className="w-3 h-3" /> {booking.date}
                   </span>
                 </div>
-                <span className="flex items-center gap-1 font-semibold text-xs text-white bg-slate-800 px-2.5 py-1 rounded-lg">
-                  <Users className="w-3.5 h-3.5 text-amber-400" />
+                <span className="flex items-center gap-1 font-semibold text-xs text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
+                  <Users className="w-3.5 h-3.5 text-amber-600" />
                   {booking.guestCount}p
                 </span>
               </div>
 
               <div className="flex items-center justify-between text-xs">
                 <div>
-                  <p className="font-bold text-white text-sm">{booking.customerName}</p>
-                  <p className="text-slate-400 text-[11px] flex items-center gap-1 mt-0.5">
-                    <Phone className="w-3 h-3 text-amber-400" /> {booking.whatsapp}
+                  <p className="font-bold text-slate-900 text-sm">{booking.customerName}</p>
+                  <p className="text-slate-500 text-[11px] flex items-center gap-1 mt-0.5">
+                    <Phone className="w-3 h-3 text-amber-600" /> {booking.whatsapp}
                   </p>
                 </div>
                 <div className="text-right">
-                  <span className="font-semibold text-amber-400 text-xs block">
+                  <span className="font-semibold text-amber-800 text-xs block">
                     {booking.tableId?.tableNumber || 'Auto-Allocated'} ({booking.tableId?.zone || 'Indoor'})
                   </span>
-                  <span className="text-[10px] text-slate-400 flex items-center justify-end gap-1 font-mono">
-                    <Clock className="w-3 h-3 text-slate-500" /> {booking.slotId?.startTime} - {booking.slotId?.endTime}
+                  <span className="text-[10px] text-slate-500 flex items-center justify-end gap-1 font-mono">
+                    <Clock className="w-3 h-3 text-slate-400" /> {booking.slotId?.startTime} - {booking.slotId?.endTime}
                   </span>
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
                 <select
                   value={booking.status}
                   onChange={(e) => handleStatusChange(booking._id, e.target.value)}
                   className={`flex-1 px-3 py-2 rounded-xl text-xs font-bold border focus:outline-none capitalize ${
                     booking.status === 'confirmed'
-                      ? 'bg-emerald-950 border-emerald-500/50 text-emerald-300'
+                      ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
                       : booking.status === 'seated'
-                      ? 'bg-blue-950 border-blue-500/50 text-blue-300'
+                      ? 'bg-blue-50 border-blue-300 text-blue-800'
                       : booking.status === 'completed'
-                      ? 'bg-purple-950 border-purple-500/50 text-purple-300'
+                      ? 'bg-purple-50 border-purple-300 text-purple-800'
                       : booking.status === 'held'
-                      ? 'bg-amber-950 border-amber-500/50 text-amber-300'
-                      : 'bg-rose-950 border-rose-500/50 text-rose-300'
+                      ? 'bg-amber-50 border-amber-300 text-amber-800'
+                      : 'bg-rose-50 border-rose-300 text-rose-800'
                   }`}
                 >
                   <option value="held">Held (5min)</option>
@@ -196,7 +196,7 @@ export default function BookingsManagerPage() {
                     href={`https://wa.me/${booking.whatsapp.replace(/[^0-9]/g, '')}?text=Hello%20${booking.customerName},%20regarding%20your%20table%20reservation%20at%20The%20Royal%20Grand%20Bistro...`}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-xl border border-emerald-500/40 transition shrink-0"
+                    className="p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl border border-emerald-300 transition shrink-0"
                     title="WhatsApp"
                   >
                     <MessageSquare className="w-4 h-4" />
@@ -209,10 +209,10 @@ export default function BookingsManagerPage() {
       </div>
 
       {/* DESKTOP RESERVATIONS TABLE (Hidden on mobile) */}
-      <div className="hidden sm:block bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+      <div className="hidden sm:block bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-950 text-slate-400 uppercase tracking-wider border-b border-slate-800 font-bold">
+            <thead className="bg-slate-50 text-slate-700 uppercase tracking-wider border-b border-slate-200 font-bold">
               <tr>
                 <th className="py-4 px-6">Reference / Date</th>
                 <th className="py-4 px-6">Guest Info</th>
@@ -222,7 +222,7 @@ export default function BookingsManagerPage() {
                 <th className="py-4 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 text-slate-300">
+            <tbody className="divide-y divide-slate-100 text-slate-700">
               {bookings.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-12 text-center text-slate-500">
@@ -231,31 +231,31 @@ export default function BookingsManagerPage() {
                 </tr>
               ) : (
                 bookings.map((booking) => (
-                  <tr key={booking._id} className="hover:bg-slate-800/30 transition">
+                  <tr key={booking._id} className="hover:bg-slate-50/70 transition">
                     <td className="py-4 px-6 space-y-1">
-                      <span className="font-mono font-bold text-white text-xs block">
+                      <span className="font-mono font-bold text-slate-900 text-xs block">
                         {booking.bookingReference || 'HOLD-TEMP'}
                       </span>
-                      <span className="text-[11px] text-slate-400">{booking.date}</span>
+                      <span className="text-[11px] text-slate-500">{booking.date}</span>
                     </td>
                     <td className="py-4 px-6 space-y-0.5">
-                      <div className="font-bold text-white text-xs">{booking.customerName}</div>
-                      <div className="flex items-center gap-1 text-[11px] text-slate-400">
-                        <Phone className="w-3 h-3 text-amber-400" />
+                      <div className="font-bold text-slate-900 text-xs">{booking.customerName}</div>
+                      <div className="flex items-center gap-1 text-[11px] text-slate-500">
+                        <Phone className="w-3 h-3 text-amber-600" />
                         <span>{booking.whatsapp}</span>
                       </div>
                     </td>
                     <td className="py-4 px-6 space-y-0.5">
-                      <div className="font-semibold text-amber-400">
+                      <div className="font-semibold text-amber-800">
                         {booking.tableId?.tableNumber || 'Auto-Allocated'} ({booking.tableId?.zone || 'Zone'})
                       </div>
-                      <div className="text-[11px] text-slate-400">
+                      <div className="text-[11px] text-slate-500">
                         {booking.slotId?.startTime} - {booking.slotId?.endTime}
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="flex items-center gap-1 font-semibold text-slate-200">
-                        <Users className="w-3.5 h-3.5 text-amber-400" />
+                      <span className="flex items-center gap-1 font-semibold text-slate-700">
+                        <Users className="w-3.5 h-3.5 text-amber-600" />
                         {booking.guestCount} Guests
                       </span>
                     </td>
@@ -265,14 +265,14 @@ export default function BookingsManagerPage() {
                         onChange={(e) => handleStatusChange(booking._id, e.target.value)}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold border focus:outline-none capitalize ${
                           booking.status === 'confirmed'
-                            ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300'
+                            ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
                             : booking.status === 'seated'
-                            ? 'bg-blue-950/80 border-blue-500/50 text-blue-300'
+                            ? 'bg-blue-50 border-blue-300 text-blue-800'
                             : booking.status === 'completed'
-                            ? 'bg-purple-950/80 border-purple-500/50 text-purple-300'
+                            ? 'bg-purple-50 border-purple-300 text-purple-800'
                             : booking.status === 'held'
-                            ? 'bg-amber-950/80 border-amber-500/50 text-amber-300'
-                            : 'bg-rose-950/80 border-rose-500/50 text-rose-300'
+                            ? 'bg-amber-50 border-amber-300 text-amber-800'
+                            : 'bg-rose-50 border-rose-300 text-rose-800'
                         }`}
                       >
                         <option value="held">Held (5min)</option>
@@ -288,7 +288,7 @@ export default function BookingsManagerPage() {
                           href={`https://wa.me/${booking.whatsapp.replace(/[^0-9]/g, '')}?text=Hello%20${booking.customerName},%20regarding%20your%20table%20reservation%20at%20The%20Royal%20Grand%20Bistro...`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-lg border border-emerald-500/40 transition text-xs font-semibold"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg border border-emerald-300 transition text-xs font-semibold"
                         >
                           <MessageSquare className="w-3.5 h-3.5" /> WhatsApp
                         </a>

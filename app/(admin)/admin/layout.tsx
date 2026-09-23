@@ -65,20 +65,20 @@ export default function AdminLayout({
         <div
           className={`${
             t.visible ? 'animate-enter' : 'animate-leave'
-          } max-w-md w-full bg-slate-900 border-2 border-amber-400 shadow-2xl rounded-2xl pointer-events-auto flex p-4`}
+          } max-w-md w-full bg-white border border-amber-300 shadow-xl rounded-2xl pointer-events-auto flex p-4 ring-2 ring-amber-400/20`}
         >
           <div className="flex-1 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold shadow-xs">
               <CalendarCheck className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+              <p className="text-xs font-bold text-amber-800 uppercase tracking-wider">
                 🔔 New Reservation Received!
               </p>
-              <p className="text-xs font-semibold text-white">
+              <p className="text-xs font-bold text-slate-900">
                 {booking.customerName} • {booking.guestCount} Guests
               </p>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[10px] text-slate-500 font-medium">
                 Ref: {booking.bookingReference} ({booking.date})
               </p>
             </div>
@@ -93,20 +93,20 @@ export default function AdminLayout({
         <div
           className={`${
             t.visible ? 'animate-enter' : 'animate-leave'
-          } max-w-md w-full bg-slate-900 border-2 border-emerald-400 shadow-2xl rounded-2xl pointer-events-auto flex p-4`}
+          } max-w-md w-full bg-white border border-emerald-300 shadow-xl rounded-2xl pointer-events-auto flex p-4 ring-2 ring-emerald-400/20`}
         >
           <div className="flex-1 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-400 text-slate-950 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-bold shadow-xs">
               <ShoppingBag className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+              <p className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
                 🔔 New Food Order Received!
               </p>
-              <p className="text-xs font-semibold text-white">
+              <p className="text-xs font-bold text-slate-900">
                 Order #{order.orderNumber} • ${Number(order.totalAmount || 0).toFixed(2)}
               </p>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[10px] text-slate-500 font-medium">
                 {order.customerName} ({order.type})
               </p>
             </div>
@@ -125,7 +125,7 @@ export default function AdminLayout({
   }, [isLoginPage]);
 
   if (isLoginPage) {
-    return <div className="min-h-screen bg-[#070b14]">{children}</div>;
+    return <div className="min-h-screen bg-slate-50">{children}</div>;
   }
 
   const navItems = [
@@ -149,18 +149,18 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="dark min-h-screen bg-[#070b14] text-slate-100 flex">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex">
       {/* Sidebar Desktop */}
-      <aside className="hidden lg:flex w-64 flex-col justify-between bg-slate-950 border-r border-slate-800 p-4 shrink-0">
+      <aside className="hidden lg:flex w-64 flex-col justify-between bg-white border-r border-slate-200/80 p-4 shrink-0 shadow-xs">
         <div className="space-y-6">
           {/* Logo */}
           <Link href="/admin/dashboard" className="flex items-center gap-3 px-2">
-            <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-slate-950 font-bold shadow-lg shadow-amber-500/20">
+            <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-slate-950 font-bold shadow-md shadow-amber-500/20">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <span className="font-serif text-lg font-bold text-white block">Royal Bistro</span>
-              <span className="text-[10px] uppercase tracking-wider text-amber-400 font-semibold">Admin Panel</span>
+              <span className="font-serif text-lg font-bold text-slate-900 block">Royal Bistro</span>
+              <span className="text-[10px] uppercase tracking-wider text-amber-700 font-bold">Admin Portal</span>
             </div>
           </Link>
 
@@ -175,13 +175,13 @@ export default function AdminLayout({
                   href={item.href}
                   className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
                     isActive
-                      ? 'bg-amber-400 text-slate-950 shadow-md font-bold'
+                      ? 'bg-amber-50 text-amber-900 border border-amber-300/80 shadow-xs font-bold'
                       : item.highlight
-                      ? 'text-amber-300 hover:bg-slate-900 hover:text-white'
-                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                      ? 'text-amber-800 hover:bg-amber-50/50 hover:text-amber-900'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   }`}
                 >
-                  <Icon className="w-4 h-4 shrink-0" />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-amber-600' : ''}`} />
                   <span>{item.name}</span>
                 </Link>
               );
@@ -190,19 +190,19 @@ export default function AdminLayout({
         </div>
 
         {/* User Info & Logout */}
-        <div className="pt-4 border-t border-slate-800 space-y-3">
+        <div className="pt-4 border-t border-slate-200 space-y-3">
           <div className="flex items-center gap-3 px-2">
-            <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 font-bold text-xs">
+            <div className="w-9 h-9 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800 font-bold text-xs">
               {auth.user?.name ? auth.user.name[0].toUpperCase() : 'A'}
             </div>
             <div className="overflow-hidden">
-              <p className="text-xs font-bold text-white truncate">{auth.user?.name || 'Administrator'}</p>
-              <p className="text-[10px] text-amber-400 capitalize">{auth.user?.role || 'Superadmin'}</p>
+              <p className="text-xs font-bold text-slate-900 truncate">{auth.user?.name || 'Administrator'}</p>
+              <p className="text-[10px] text-amber-700 capitalize font-medium">{auth.user?.role || 'Superadmin'}</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 py-2 bg-slate-900 hover:bg-rose-950/40 text-rose-400 font-bold text-xs rounded-xl border border-slate-800 hover:border-rose-800 transition"
+            className="w-full flex items-center justify-center gap-2 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs rounded-xl border border-rose-200 transition"
           >
             <LogOut className="w-3.5 h-3.5" /> Log Out
           </button>
@@ -212,19 +212,19 @@ export default function AdminLayout({
       {/* Main Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile Header Bar */}
-        <header className="lg:hidden h-16 bg-slate-950 border-b border-slate-800 px-4 flex items-center justify-between">
+        <header className="lg:hidden h-16 bg-white border-b border-slate-200 px-4 flex items-center justify-between shadow-xs">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 rounded-lg bg-slate-900 text-slate-300"
+              className="p-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200"
             >
               {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
-            <span className="font-bold text-sm text-white">Admin Control Panel</span>
+            <span className="font-bold text-sm text-slate-900">Admin Control Panel</span>
           </div>
           <button
             onClick={handleLogout}
-            className="p-2 rounded-lg bg-slate-900 text-rose-400"
+            className="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100"
             title="Log Out"
           >
             <LogOut className="w-4 h-4" />
@@ -233,7 +233,7 @@ export default function AdminLayout({
 
         {/* Mobile Navigation Drawer */}
         {sidebarOpen && (
-          <div className="lg:hidden bg-slate-950 border-b border-slate-800 p-4 space-y-1 z-30">
+          <div className="lg:hidden bg-white border-b border-slate-200 p-4 space-y-1 z-30 shadow-md">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               const Icon = item.icon;
@@ -244,8 +244,8 @@ export default function AdminLayout({
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
                     isActive
-                      ? 'bg-amber-400 text-slate-950 font-bold'
-                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                      ? 'bg-amber-100 text-amber-900 font-bold'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   }`}
                 >
                   <Icon className="w-4 h-4" />

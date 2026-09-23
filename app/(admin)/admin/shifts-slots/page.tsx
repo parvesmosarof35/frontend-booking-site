@@ -81,10 +81,11 @@ export default function ShiftsSlotsPage() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            Shift & Slot Schedule Management
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <Clock className="w-6 h-6 text-amber-600" />
+            <span>Shift & Slot Schedule Management</span>
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             Define dining shift operating hours and auto-generate bookable time intervals with capacity safeguards.
           </p>
         </div>
@@ -97,7 +98,7 @@ export default function ShiftsSlotsPage() {
             setMaxCapacity(60);
             setShiftModalOpen(true);
           }}
-          className="flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition shadow"
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs rounded-xl transition shadow-xs cursor-pointer"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>New Shift</span>
@@ -112,25 +113,25 @@ export default function ShiftsSlotsPage() {
           return (
             <div
               key={shift._id}
-              className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-5 shadow-xl"
+              className="bg-white border border-slate-200/80 rounded-3xl p-6 space-y-5 shadow-xs hover:shadow-md transition"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-bold text-lg text-white">{shift.name}</h3>
-                  <p className="text-xs text-amber-400 font-mono font-semibold">
+                  <h3 className="font-bold text-lg text-slate-900">{shift.name}</h3>
+                  <p className="text-xs text-amber-700 font-mono font-bold">
                     {shift.startTime} - {shift.endTime}
                   </p>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs px-3 py-1 bg-slate-800 rounded-full border border-slate-700 text-slate-300">
+                  <span className="text-xs px-3 py-1 bg-slate-100 rounded-full border border-slate-200 text-slate-700 font-medium">
                     Max: {shift.maxCapacity} Guests
                   </span>
                 </div>
               </div>
 
               {/* Slot Generator Button */}
-              <div className="flex items-center justify-between pt-2 border-t border-slate-800">
-                <span className="text-xs text-slate-400">
+              <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                <span className="text-xs text-slate-500">
                   {shiftSlots.length} Bookable Time Slots
                 </span>
                 <button
@@ -140,7 +141,7 @@ export default function ShiftsSlotsPage() {
                     setSlotCapacity(Math.floor(shift.maxCapacity / 2));
                     setSlotGenModalOpen(true);
                   }}
-                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-semibold rounded-lg transition border border-slate-700"
+                  className="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-semibold rounded-lg transition border border-amber-200/80"
                 >
                   Generate Slots
                 </button>
@@ -148,19 +149,25 @@ export default function ShiftsSlotsPage() {
 
               {/* Slots List */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {shiftSlots.map((slot) => (
-                  <div
-                    key={slot._id}
-                    className="p-2.5 bg-slate-950 border border-slate-800/80 rounded-xl text-center space-y-1"
-                  >
-                    <div className="font-mono text-xs font-bold text-slate-200">
-                      {slot.startTime} - {slot.endTime}
-                    </div>
-                    <div className="text-[10px] text-slate-500">
-                      Cap: {slot.maxCapacity}
-                    </div>
+                {shiftSlots.length === 0 ? (
+                  <div className="col-span-full py-4 text-center text-xs text-slate-400">
+                    No slots generated yet. Click &quot;Generate Slots&quot; above.
                   </div>
-                ))}
+                ) : (
+                  shiftSlots.map((slot) => (
+                    <div
+                      key={slot._id}
+                      className="p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-center space-y-1"
+                    >
+                      <div className="font-mono text-xs font-bold text-slate-800">
+                        {slot.startTime} - {slot.endTime}
+                      </div>
+                      <div className="text-[10px] text-slate-500">
+                        Cap: {slot.maxCapacity}
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           );
@@ -169,70 +176,70 @@ export default function ShiftsSlotsPage() {
 
       {/* Modal: New Shift */}
       {shiftModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-white">Create Dining Shift</h3>
-              <button onClick={() => setShiftModalOpen(false)} className="text-slate-400 hover:text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+          <div className="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-bold text-slate-900">Create Dining Shift</h3>
+              <button onClick={() => setShiftModalOpen(false)} className="text-slate-400 hover:text-slate-700">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleCreateShift} className="space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">Shift Name *</label>
+                <label className="block font-semibold text-slate-700 mb-1">Shift Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Dinner Shift"
                   value={shiftName}
                   onChange={(e) => setShiftName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Start Time (HH:MM)</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Start Time (HH:MM)</label>
                   <input
                     type="time"
                     required
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">End Time (HH:MM)</label>
+                  <label className="block font-semibold text-slate-700 mb-1">End Time (HH:MM)</label>
                   <input
                     type="time"
                     required
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                   />
                 </div>
               </div>
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">Max Venue Capacity for Shift</label>
+                <label className="block font-semibold text-slate-700 mb-1">Max Venue Capacity for Shift</label>
                 <input
                   type="number"
                   min={1}
                   required
                   value={maxCapacity}
                   onChange={(e) => setMaxCapacity(parseInt(e.target.value, 10))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                 />
               </div>
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-2 flex justify-end gap-2 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShiftModalOpen(false)}
-                  className="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl"
+                  className="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-xs transition"
                 >
                   Save Shift
                 </button>
@@ -244,21 +251,21 @@ export default function ShiftsSlotsPage() {
 
       {/* Modal: Generate Slots */}
       {slotGenModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-white">Generate Bookable Slots</h3>
-              <button onClick={() => setSlotGenModalOpen(false)} className="text-slate-400 hover:text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+          <div className="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-bold text-slate-900">Generate Bookable Slots</h3>
+              <button onClick={() => setSlotGenModalOpen(false)} className="text-slate-400 hover:text-slate-700">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleGenerateSlots} className="space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">Slot Interval (Minutes)</label>
+                <label className="block font-semibold text-slate-700 mb-1">Slot Interval (Minutes)</label>
                 <select
                   value={intervalMinutes}
                   onChange={(e) => setIntervalMinutes(parseInt(e.target.value, 10))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                 >
                   <option value={30}>Every 30 Minutes</option>
                   <option value={45}>Every 45 Minutes</option>
@@ -268,27 +275,27 @@ export default function ShiftsSlotsPage() {
                 </select>
               </div>
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">Max Seating Limit Per Slot</label>
+                <label className="block font-semibold text-slate-700 mb-1">Max Seating Limit Per Slot</label>
                 <input
                   type="number"
                   min={1}
                   required
                   value={slotCapacity}
                   onChange={(e) => setSlotCapacity(parseInt(e.target.value, 10))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition"
                 />
               </div>
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-2 flex justify-end gap-2 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setSlotGenModalOpen(false)}
-                  className="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl"
+                  className="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-xs transition"
                 >
                   Generate Slots
                 </button>
