@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'black-translucent',
+    statusBarStyle: 'default',
     title: 'Royal Bistro',
   },
 };
@@ -19,7 +19,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
-  themeColor: '#090d16',
+  themeColor: '#ffffff',
 };
 
 export default function RootLayout({
@@ -28,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
-      <body className="min-h-screen bg-[#090d16] text-slate-100 antialiased selection:bg-amber-500 selection:text-black">
+    <html lang="en" className="scroll-smooth">
+      <body className="min-h-screen bg-[#fafaf9] text-slate-900 antialiased selection:bg-amber-400 selection:text-slate-950 font-sans">
         <Providers>
           {children}
           <CartDrawer />

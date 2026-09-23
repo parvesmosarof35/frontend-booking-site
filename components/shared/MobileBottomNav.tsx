@@ -30,12 +30,12 @@ export default function MobileBottomNav() {
     { label: 'Home', href: '/', icon: Home },
     { label: 'Reserve', href: '/book', icon: CalendarCheck },
     { label: 'Menu', href: '/order', icon: UtensilsCrossed },
-    { label: 'Track', href: '/track', icon: Radar },
     { label: 'Offers', href: '/offers', icon: Tag },
+    { label: 'Track', href: '/track', icon: Radar },
   ];
 
   return (
-    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-t border-slate-800/80 backdrop-blur-xl px-2 py-1.5 shadow-2xl flex items-center justify-around">
+    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 border-t border-slate-200 backdrop-blur-md px-2 py-1.5 shadow-lg flex items-center justify-around">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href;
@@ -46,14 +46,14 @@ export default function MobileBottomNav() {
             href={item.href}
             className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all ${
               isActive
-                ? 'text-amber-400 font-bold scale-105'
-                : 'text-slate-400 hover:text-slate-200 font-medium'
+                ? 'text-amber-700 font-bold scale-105'
+                : 'text-slate-500 hover:text-slate-900 font-medium'
             }`}
           >
             <div className="relative">
               <Icon className="w-5 h-5 stroke-[2.2]" />
               {item.href === '/order' && totalCartCount > 0 && (
-                <span className="absolute -top-1.5 -right-2.5 w-4 h-4 rounded-full bg-amber-400 text-slate-950 font-bold text-[9px] flex items-center justify-center shadow">
+                <span className="absolute -top-1.5 -right-2.5 w-4 h-4 rounded-full bg-amber-500 text-slate-950 font-bold text-[9px] flex items-center justify-center shadow">
                   {totalCartCount}
                 </span>
               )}
@@ -67,11 +67,11 @@ export default function MobileBottomNav() {
       {totalCartCount > 0 && pathname !== '/order' && (
         <button
           onClick={() => dispatch(setCartDrawerOpen(true))}
-          className="flex flex-col items-center justify-center py-1 px-3 text-amber-400 font-bold"
+          className="flex flex-col items-center justify-center py-1 px-3 text-amber-700 font-bold"
         >
           <div className="relative">
             <ShoppingBag className="w-5 h-5 stroke-[2.2]" />
-            <span className="absolute -top-1.5 -right-2.5 w-4 h-4 rounded-full bg-amber-400 text-slate-950 font-bold text-[9px] flex items-center justify-center shadow">
+            <span className="absolute -top-1.5 -right-2.5 w-4 h-4 rounded-full bg-amber-500 text-slate-950 font-bold text-[9px] flex items-center justify-center shadow">
               {totalCartCount}
             </span>
           </div>

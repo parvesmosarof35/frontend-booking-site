@@ -31,7 +31,7 @@ const steps = [
   {
     key: 'pending',
     label: 'Order Placed',
-    desc: 'Sent to restaurant kitchen',
+    desc: 'Sent to kitchen',
     icon: Clock,
   },
   {
@@ -42,19 +42,19 @@ const steps = [
   },
   {
     key: 'preparing',
-    label: 'In the Kitchen',
-    desc: 'Chef is crafting your meal',
+    label: 'In Kitchen',
+    desc: 'Chef crafting meal',
     icon: ChefHat,
   },
   {
     key: 'out_for_delivery',
     label: 'On the Way',
-    desc: 'Rider en route to you',
+    desc: 'Rider en route',
     icon: Bike,
   },
   {
     key: 'delivered',
-    label: 'Delivered / Ready',
+    label: 'Delivered',
     desc: 'Bon appétit!',
     icon: PackageCheck,
   },
@@ -68,12 +68,12 @@ export default function LiveOrderStepper({
 }: LiveOrderStepperProps) {
   if (status === 'cancelled') {
     return (
-      <div className="p-6 bg-rose-950/40 border border-rose-800/60 rounded-3xl text-center space-y-2">
-        <div className="w-12 h-12 rounded-full bg-rose-900/60 text-rose-400 flex items-center justify-center mx-auto">
+      <div className="p-6 bg-rose-50 border border-rose-200 rounded-3xl text-center space-y-2">
+        <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
           <XCircle className="w-7 h-7" />
         </div>
-        <h4 className="font-serif text-lg font-bold text-white">Order Cancelled</h4>
-        <p className="text-xs text-rose-300">
+        <h4 className="font-serif text-lg font-bold text-slate-900">Order Cancelled</h4>
+        <p className="text-xs text-rose-700">
           This order has been cancelled. If you have questions, please contact support.
         </p>
       </div>
@@ -100,16 +100,16 @@ export default function LiveOrderStepper({
   const currentIndex = getStepIndex(status);
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+    <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+      <div className="flex items-center justify-between border-b border-slate-100 pb-4">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-xs uppercase font-bold tracking-wider text-emerald-400">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-xs uppercase font-bold tracking-wider text-emerald-700">
             Live Kitchen & Delivery Tracker
           </span>
         </div>
         {updatedAt && (
-          <span className="text-[11px] text-slate-500 font-mono">
+          <span className="text-[11px] text-slate-400 font-mono">
             Updated: {new Date(updatedAt).toLocaleTimeString()}
           </span>
         )}
@@ -117,12 +117,12 @@ export default function LiveOrderStepper({
 
       {/* Stepper track */}
       <div className="relative">
-        <div className="hidden sm:block absolute top-6 left-8 right-8 h-1 bg-slate-800 -z-0">
+        <div className="hidden sm:block absolute top-6 left-8 right-8 h-1 bg-slate-100 -z-0">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${(currentIndex / (steps.length - 1)) * 100}%` }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="h-full bg-gradient-to-r from-amber-500 via-amber-400 to-emerald-400 rounded-full"
+            className="h-full bg-gradient-to-r from-amber-500 via-amber-400 to-emerald-500 rounded-full"
           />
         </div>
 
@@ -133,12 +133,12 @@ export default function LiveOrderStepper({
             const isCurrent = index === currentIndex;
             const isPending = index > currentIndex;
 
-            let iconBox = 'bg-slate-950 border-slate-800 text-slate-600';
+            let iconBox = 'bg-slate-50 border-slate-200 text-slate-400';
             if (isCompleted) {
-              iconBox = 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-lg shadow-emerald-500/20';
+              iconBox = 'bg-emerald-500 text-white border-emerald-500 shadow-sm';
             } else if (isCurrent) {
               iconBox =
-                'bg-amber-400 text-slate-950 border-amber-300 shadow-xl shadow-amber-400/30 scale-110 ring-4 ring-amber-400/20 animate-pulse';
+                'bg-amber-500 text-slate-950 border-amber-400 shadow-md ring-4 ring-amber-200/60 animate-pulse';
             }
 
             return (
@@ -155,15 +155,15 @@ export default function LiveOrderStepper({
                   <h5
                     className={`text-xs font-bold ${
                       isCurrent
-                        ? 'text-amber-400'
+                        ? 'text-amber-800'
                         : isCompleted
-                        ? 'text-white'
-                        : 'text-slate-500'
+                        ? 'text-slate-900'
+                        : 'text-slate-400'
                     }`}
                   >
                     {step.label}
                   </h5>
-                  <p className="text-[10px] text-slate-400 leading-tight mt-0.5">
+                  <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
                     {step.desc}
                   </p>
                 </div>

@@ -149,7 +149,7 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex">
+    <div className="dark min-h-screen bg-[#070b14] text-slate-100 flex">
       {/* Sidebar Desktop */}
       <aside className="hidden lg:flex w-64 flex-col justify-between bg-slate-950 border-r border-slate-800 p-4 shrink-0">
         <div className="space-y-6">

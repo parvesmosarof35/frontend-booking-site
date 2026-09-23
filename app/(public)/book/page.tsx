@@ -198,56 +198,56 @@ function BookingWizard() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
       {/* Page Header */}
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold uppercase tracking-wider">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Cinema-Style 2D Seat & Table Picker</span>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold uppercase tracking-wider">
+          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+          <span>Interactive 2D Floor Seating</span>
         </div>
-        <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+        <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
           Reserve Your Table
         </h1>
-        <p className="text-sm text-slate-400 max-w-lg mx-auto">
-          Choose your favorite spot—window side, rooftop skyline, or VIP lounge—with real-time seating allocation.
+        <p className="text-sm text-slate-600 max-w-lg mx-auto">
+          Select your schedule and choose your favorite seating location in real-time.
         </p>
       </div>
 
-      {/* Wizard Progress Steps */}
-      <div className="grid grid-cols-4 gap-2 border-b border-slate-800 pb-4 text-xs font-semibold">
+      {/* Wizard Progress Steps (Light Mode) */}
+      <div className="grid grid-cols-4 gap-2 border-b border-slate-200 pb-4 text-xs font-bold">
         <div
           className={`flex items-center gap-2 ${
-            step >= 1 ? 'text-amber-400' : 'text-slate-600'
+            step >= 1 ? 'text-amber-700' : 'text-slate-400'
           }`}
         >
-          <span className="w-6 h-6 rounded-full bg-slate-900 border border-current flex items-center justify-center text-xs">
+          <span className="w-6 h-6 rounded-full bg-white border-2 border-current flex items-center justify-center text-xs shadow-xs">
             1
           </span>
           <span className="hidden sm:inline">Date & Shift</span>
         </div>
         <div
           className={`flex items-center gap-2 ${
-            step >= 2 ? 'text-amber-400' : 'text-slate-600'
+            step >= 2 ? 'text-amber-700' : 'text-slate-400'
           }`}
         >
-          <span className="w-6 h-6 rounded-full bg-slate-900 border border-current flex items-center justify-center text-xs">
+          <span className="w-6 h-6 rounded-full bg-white border-2 border-current flex items-center justify-center text-xs shadow-xs">
             2
           </span>
           <span className="hidden sm:inline">Slot & Table</span>
         </div>
         <div
           className={`flex items-center gap-2 ${
-            step >= 3 ? 'text-amber-400' : 'text-slate-600'
+            step >= 3 ? 'text-amber-700' : 'text-slate-400'
           }`}
         >
-          <span className="w-6 h-6 rounded-full bg-slate-900 border border-current flex items-center justify-center text-xs">
+          <span className="w-6 h-6 rounded-full bg-white border-2 border-current flex items-center justify-center text-xs shadow-xs">
             3
           </span>
           <span className="hidden sm:inline">Guest Details</span>
         </div>
         <div
           className={`flex items-center gap-2 ${
-            step === 4 ? 'text-emerald-400' : 'text-slate-600'
+            step === 4 ? 'text-emerald-700' : 'text-slate-400'
           }`}
         >
-          <span className="w-6 h-6 rounded-full bg-slate-900 border border-current flex items-center justify-center text-xs">
+          <span className="w-6 h-6 rounded-full bg-white border-2 border-current flex items-center justify-center text-xs shadow-xs">
             4
           </span>
           <span className="hidden sm:inline">VIP Pass</span>
@@ -256,10 +256,10 @@ function BookingWizard() {
 
       {/* STEP 1: DATE & SHIFT SELECTION */}
       {step === 1 && (
-        <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-8 backdrop-blur-xl shadow-2xl">
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-amber-400" />
+        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-8 shadow-sm">
+          <div className="space-y-3">
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-amber-600" />
               <span>1. Choose Reservation Date</span>
             </h2>
             <input
@@ -267,13 +267,13 @@ function BookingWizard() {
               min={new Date().toISOString().split('T')[0]}
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-base text-white focus:outline-none focus:border-amber-400 font-medium"
+              className="w-full bg-slate-50 border border-slate-300 rounded-2xl px-4 py-3.5 text-base text-slate-900 font-semibold focus:outline-none focus:border-amber-500"
             />
           </div>
 
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Clock className="w-5 h-5 text-amber-400" />
+          <div className="space-y-3">
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-amber-600" />
               <span>2. Select Dining Shift</span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -284,17 +284,17 @@ function BookingWizard() {
                   onClick={() => setSelectedShift(shift._id)}
                   className={`p-5 rounded-2xl border text-left transition flex flex-col justify-between space-y-2 ${
                     selectedShift === shift._id
-                      ? 'bg-amber-500/10 border-amber-400 shadow-lg shadow-amber-500/10'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
+                      ? 'bg-amber-50/80 border-amber-500 shadow-sm ring-2 ring-amber-400/20'
+                      : 'bg-slate-50 border-slate-200 hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-white text-base">{shift.name}</span>
-                    <span className="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-amber-400 font-mono">
+                    <span className="font-bold text-slate-900 text-base">{shift.name}</span>
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-white text-amber-800 font-mono font-bold border border-slate-200">
                       {shift.startTime} - {shift.endTime}
                     </span>
                   </div>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-500">
                     Max capacity: {shift.maxCapacity} guests
                   </span>
                 </button>
@@ -306,7 +306,7 @@ function BookingWizard() {
             <button
               type="button"
               onClick={() => setStep(2)}
-              className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm rounded-xl transition shadow-lg flex items-center gap-2"
+              className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl transition shadow-md flex items-center gap-2"
             >
               <span>Next: Select Slot & Floor Plan</span>
               <ArrowRight className="w-4 h-4" />
@@ -317,11 +317,11 @@ function BookingWizard() {
 
       {/* STEP 2: SLOT, GUESTS & INTERACTIVE FLOOR SEAT PICKER */}
       {step === 2 && (
-        <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-8 backdrop-blur-xl shadow-2xl">
+        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-8 shadow-sm">
           {/* Guest Count */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Users className="w-5 h-5 text-amber-400" />
+          <div className="space-y-3">
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Users className="w-5 h-5 text-amber-600" />
               <span>Party Size (Number of Guests)</span>
             </h2>
             <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
@@ -335,8 +335,8 @@ function BookingWizard() {
                   }}
                   className={`py-3 rounded-xl font-bold text-sm border transition ${
                     guestCount === num
-                      ? 'bg-amber-400 text-slate-950 border-amber-400 shadow-md'
-                      : 'bg-slate-950 text-slate-300 border-slate-800 hover:border-slate-700'
+                      ? 'bg-amber-500 text-slate-950 border-amber-500 shadow-sm'
+                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-300'
                   }`}
                 >
                   {num} {num === 1 ? 'Solo' : 'P'}
@@ -346,19 +346,19 @@ function BookingWizard() {
           </div>
 
           {/* Time Slots */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Clock className="w-5 h-5 text-amber-400" />
+          <div className="space-y-3">
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-amber-600" />
               <span>Available Time Slots ({selectedDate})</span>
             </h2>
 
             {loadingSlots ? (
-              <div className="p-8 text-center text-slate-400 text-sm">
+              <div className="p-8 text-center text-slate-500 text-sm">
                 Checking live floor layout availability...
               </div>
             ) : availableSlots.length === 0 ? (
-              <div className="p-6 bg-rose-950/30 border border-rose-800/40 rounded-2xl text-rose-300 text-xs flex items-center gap-3">
-                <AlertCircle className="w-5 h-5 flex-shrink-0" />
+              <div className="p-6 bg-rose-50 border border-rose-200 rounded-2xl text-rose-800 text-xs flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 flex-shrink-0 text-rose-600" />
                 <span>
                   No available tables for {guestCount} guests on this date. Please try another date or party size.
                 </span>
@@ -376,17 +376,17 @@ function BookingWizard() {
                     }}
                     className={`p-3.5 rounded-2xl border text-center transition flex flex-col items-center justify-center space-y-1 ${
                       !slot.available
-                        ? 'bg-slate-950/40 border-slate-900 text-slate-600 opacity-40 cursor-not-allowed'
+                        ? 'bg-slate-100 border-slate-200 text-slate-400 opacity-50 cursor-not-allowed'
                         : selectedSlot?.slotId === slot.slotId
-                        ? 'bg-amber-400 text-slate-950 border-amber-400 font-bold shadow-lg shadow-amber-500/20'
-                        : 'bg-slate-950 text-slate-200 border-slate-800 hover:border-slate-700'
+                        ? 'bg-amber-500 text-slate-950 border-amber-500 font-bold shadow-md'
+                        : 'bg-slate-50 text-slate-800 border-slate-200 hover:border-slate-300'
                     }`}
                   >
-                    <span className="font-mono text-sm font-semibold">
+                    <span className="font-mono text-sm font-bold">
                       {slot.startTime} - {slot.endTime}
                     </span>
                     <span className="text-[10px] opacity-80">
-                      {slot.available ? `${slot.availableTablesCount} table(s) open` : 'Fully Booked'}
+                      {slot.available ? `${slot.availableTablesCount} open table(s)` : 'Fully Booked'}
                     </span>
                   </button>
                 ))}
@@ -397,27 +397,27 @@ function BookingWizard() {
           {/* Table Selection Strategy Switcher */}
           {selectedSlot && (
             <div className="space-y-4 pt-2">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-slate-800 pb-4">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-slate-200 pb-4">
                 <div>
-                  <h3 className="text-base font-bold text-white flex items-center gap-2">
-                    <Compass className="w-5 h-5 text-amber-400" />
+                  <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <Compass className="w-5 h-5 text-amber-600" />
                     <span>Seating Preference</span>
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-500">
                     Choose between interactive 2D floor seat selection or automated smart allocation.
                   </p>
                 </div>
-                <div className="flex items-center gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
                   <button
                     type="button"
                     onClick={() => setSelectionMode('map')}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
                       selectionMode === 'map'
-                        ? 'bg-amber-400 text-slate-950 shadow'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-white text-slate-950 shadow-sm border border-slate-200'
+                        : 'text-slate-600 hover:text-slate-950'
                     }`}
                   >
-                    <Layers className="w-3.5 h-3.5" /> 2D Floor Map
+                    <Layers className="w-3.5 h-3.5 text-amber-600" /> 2D Floor Map
                   </button>
                   <button
                     type="button"
@@ -427,11 +427,11 @@ function BookingWizard() {
                     }}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
                       selectionMode === 'auto'
-                        ? 'bg-amber-400 text-slate-950 shadow'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-white text-slate-950 shadow-sm border border-slate-200'
+                        : 'text-slate-600 hover:text-slate-950'
                     }`}
                   >
-                    <Sparkle className="w-3.5 h-3.5" /> Smart Auto-Assign
+                    <Sparkle className="w-3.5 h-3.5 text-amber-600" /> Smart Auto-Assign
                   </button>
                 </div>
               </div>
@@ -439,11 +439,11 @@ function BookingWizard() {
               {selectionMode === 'map' ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-amber-400 font-semibold">
+                    <span className="text-xs text-amber-800 font-bold">
                       Click your favorite green table on the 2D layout below:
                     </span>
                     {selectedTable && (
-                      <span className="text-xs px-3 py-1 bg-amber-400 text-slate-950 rounded-full font-bold shadow animate-bounce">
+                      <span className="text-xs px-3 py-1 bg-amber-500 text-slate-950 rounded-full font-bold shadow animate-bounce">
                         Selected: Table {selectedTable.tableNumber} ({selectedTable.capacity}p, {selectedTable.zone})
                       </span>
                     )}
@@ -461,7 +461,7 @@ function BookingWizard() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <span className="text-xs font-semibold text-slate-300 block">
+                  <span className="text-xs font-semibold text-slate-700 block">
                     Select Preferred Dining Zone (Auto-assigned to optimal table):
                   </span>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -470,10 +470,10 @@ function BookingWizard() {
                         key={zone}
                         type="button"
                         onClick={() => setPreferredZone(zone)}
-                        className={`py-3 px-4 rounded-xl font-semibold text-xs border text-center transition ${
+                        className={`py-3 px-4 rounded-xl font-bold text-xs border text-center transition ${
                           preferredZone === zone
-                            ? 'bg-amber-500/15 border-amber-400 text-amber-300'
-                            : 'bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-700'
+                            ? 'bg-amber-50 border-amber-500 text-amber-900 ring-2 ring-amber-400/20'
+                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300'
                         }`}
                       >
                         {zone}
@@ -486,11 +486,11 @@ function BookingWizard() {
           )}
 
           {/* Navigation Buttons */}
-          <div className="pt-4 flex items-center justify-between">
+          <div className="pt-4 flex items-center justify-between border-t border-slate-100">
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition flex items-center gap-1.5"
+              className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition flex items-center gap-1.5"
             >
               <ArrowLeft className="w-4 h-4" /> Back
             </button>
@@ -498,7 +498,7 @@ function BookingWizard() {
               type="button"
               disabled={!selectedSlot?.available || holdingLoading}
               onClick={handleHoldTable}
-              className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm rounded-xl transition shadow-lg disabled:opacity-50 flex items-center gap-2"
+              className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl transition shadow-md disabled:opacity-50 flex items-center gap-2"
             >
               <span>{holdingLoading ? 'Holding Seating...' : 'Hold & Proceed (5 Mins)'}</span>
               <ArrowRight className="w-4 h-4" />
@@ -511,25 +511,25 @@ function BookingWizard() {
       {step === 3 && heldBooking && (
         <form
           onSubmit={handleConfirmBooking}
-          className="bg-slate-900/80 border border-amber-500/30 rounded-3xl p-6 sm:p-8 space-y-8 backdrop-blur-xl shadow-2xl"
+          className="bg-white border border-amber-300 rounded-3xl p-6 sm:p-8 space-y-8 shadow-sm"
         >
           {/* Temporary Hold Alert Banner */}
-          <div className="p-4 bg-amber-950/50 border border-amber-500/40 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="p-4 bg-amber-50 border border-amber-300 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <span className="w-3 h-3 rounded-full bg-amber-400 animate-ping" />
+              <span className="w-3 h-3 rounded-full bg-amber-500 animate-ping" />
               <div>
-                <p className="text-xs font-bold text-amber-300 uppercase tracking-wider">
+                <p className="text-xs font-bold text-amber-900 uppercase tracking-wider">
                   Table Temporarily Locked for You
                 </p>
-                <p className="text-xs text-slate-300">
-                  Assigned <strong className="text-amber-400">{heldBooking.table?.tableNumber}</strong> (
+                <p className="text-xs text-slate-700">
+                  Assigned <strong className="text-amber-800">{heldBooking.table?.tableNumber}</strong> (
                   {heldBooking.table?.capacity} Seats, {heldBooking.table?.zone})
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-slate-950 px-4 py-2 rounded-xl border border-amber-500/30">
-              <Clock className="w-4 h-4 text-amber-400" />
-              <span className="font-mono text-base font-bold text-amber-400">
+            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-amber-300 shadow-xs">
+              <Clock className="w-4 h-4 text-amber-600" />
+              <span className="font-mono text-base font-bold text-amber-800">
                 {formatTimer(holdTimeLeft)}
               </span>
             </div>
@@ -537,27 +537,27 @@ function BookingWizard() {
 
           {/* Form Inputs */}
           <div className="space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Users className="w-5 h-5 text-amber-400" />
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Users className="w-5 h-5 text-amber-600" />
               <span>Your Contact & Reservation Details</span>
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name *</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Full Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Parves Mosarof"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  WhatsApp Number *
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  WhatsApp Phone Number *
                 </label>
                 <input
                   type="tel"
@@ -565,12 +565,12 @@ function BookingWizard() {
                   placeholder="e.g. +8801712345678"
                   value={whatsapp}
                   onChange={(e) => setWhatsapp(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Email Address (For Instant Pass Copy)
                 </label>
                 <input
@@ -578,12 +578,12 @@ function BookingWizard() {
                   placeholder="e.g. guest@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Special Occasion / Dietary Notes
                 </label>
                 <input
@@ -591,25 +591,25 @@ function BookingWizard() {
                   placeholder="e.g. Anniversary, high chair needed"
                   value={specialRequests}
                   onChange={(e) => setSpecialRequests(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500"
                 />
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-4 flex items-center justify-between">
+          <div className="pt-4 flex items-center justify-between border-t border-slate-100">
             <button
               type="button"
               onClick={() => setStep(2)}
-              className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition flex items-center gap-1.5"
+              className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition flex items-center gap-1.5"
             >
               <ArrowLeft className="w-4 h-4" /> Change Slot / Table
             </button>
             <button
               type="submit"
               disabled={confirmingLoading}
-              className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm rounded-xl transition shadow-lg disabled:opacity-50 flex items-center gap-2"
+              className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl transition shadow-md disabled:opacity-50 flex items-center gap-2"
             >
               <span>{confirmingLoading ? 'Confirming...' : 'Confirm Reservation Pass'}</span>
               <CheckCircle2 className="w-4 h-4" />
@@ -629,7 +629,7 @@ function BookingWizard() {
               href={`https://wa.me/8801712345678?text=Hello%20The%20Royal%20Grand%20Bistro,%20I%20have%20confirmed%20reservation%20${confirmedBooking.bookingReference}%20for%20${confirmedBooking.date}%20at%20${confirmedBooking.slotId?.startTime}`}
               target="_blank"
               rel="noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition shadow hover:scale-105"
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition shadow hover:scale-102"
             >
               <MessageSquare className="w-4 h-4" /> WhatsApp Hostess
             </a>
@@ -639,7 +639,7 @@ function BookingWizard() {
                 setConfirmedBooking(null);
                 setSelectedTable(null);
               }}
-              className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs rounded-xl transition"
+              className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition"
             >
               Book Another Table
             </button>

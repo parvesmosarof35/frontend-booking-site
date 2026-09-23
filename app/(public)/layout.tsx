@@ -10,7 +10,7 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100">
+    <div className="min-h-screen flex flex-col bg-[#fafaf9] text-slate-900">
       <OffersBanner />
       <Navbar />
       <main className="flex-1 pb-16 sm:pb-0">{children}</main>
