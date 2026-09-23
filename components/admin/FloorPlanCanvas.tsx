@@ -9,7 +9,7 @@ import {
   useSensor,
   PointerSensor,
 } from '@dnd-kit/core';
-import { Users, Edit2, Trash2, CheckCircle, Clock, Ban, UserCheck } from 'lucide-react';
+import { Users, Edit2, Trash2, CheckCircle, Clock, Ban, UserCheck, MoveHorizontal } from 'lucide-react';
 
 export interface TableItem {
   _id: string;
@@ -101,18 +101,20 @@ function DraggableTable({ table, onEdit, onDelete }: DraggableTableProps) {
         </div>
       </div>
 
-      {/* Center Table Number */}
-      <div className="text-center my-auto">
-        <div className="font-bold text-lg text-white tracking-wider">
+      {/* Center Table Info */}
+      <div className="text-center">
+        <h4 className="font-serif font-extrabold text-xl text-white tracking-tight">
           {table.tableNumber}
+        </h4>
+        <div className="flex items-center justify-center gap-1 text-[11px] opacity-80 mt-0.5">
+          <Users className="w-3 h-3" />
+          <span>{table.capacity} Seats</span>
         </div>
-        <div className="text-[10px] text-slate-300 font-medium">{table.type || 'Standard'}</div>
       </div>
 
-      {/* Capacity Badge */}
-      <div className="flex items-center gap-1 text-[11px] bg-black/40 px-2 py-0.5 rounded-full border border-white/10 text-slate-200">
-        <Users className="w-3 h-3 text-amber-400" />
-        <span>{table.capacity} Seats</span>
+      {/* Bottom Type Label */}
+      <div className="text-[10px] uppercase font-bold tracking-wider opacity-70">
+        {table.type || 'Standard'}
       </div>
     </div>
   );
@@ -121,9 +123,9 @@ function DraggableTable({ table, onEdit, onDelete }: DraggableTableProps) {
 interface FloorPlanCanvasProps {
   tables: TableItem[];
   currentZone: string;
-  onPositionChange: (tableId: string, x: number, y: number) => void;
+  onPositionChange: (id: string, x: number, y: number) => void;
   onEditTable: (table: TableItem) => void;
-  onDeleteTable: (tableId: string) => void;
+  onDeleteTable: (id: string) => void;
 }
 
 export default function FloorPlanCanvas({
@@ -156,60 +158,70 @@ export default function FloorPlanCanvas({
   };
 
   return (
-    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <div className="relative w-full h-[650px] bg-[#0c1322] border-2 border-slate-800 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl">
-        {/* Floor Blueprint Grid Background */}
-        <div
-          className="absolute inset-0 opacity-15 pointer-events-none"
-          style={{
-            backgroundImage: `radial-gradient(#f59e0b 1px, transparent 1px), radial-gradient(#38bdf8 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
-            backgroundPosition: '0 0, 20px 20px',
-          }}
-        />
-
-        {/* Zone Badge Overlay */}
-        <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-slate-900/90 border border-slate-700 px-3 py-1.5 rounded-xl shadow-lg">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
-          <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
-            {currentZone} Floor Plan Canvas
-          </span>
-          <span className="text-xs text-slate-400">({zoneTables.length} Tables)</span>
-        </div>
-
-        {/* Legend */}
-        <div className="absolute top-4 right-4 z-20 hidden sm:flex items-center gap-3 bg-slate-900/90 border border-slate-700 px-3 py-1.5 rounded-xl text-xs text-slate-300">
-          <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Available
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Reserved
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Occupied
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-slate-500" /> Maintenance
-          </span>
-        </div>
-
-        {/* Render Tables */}
-        {zoneTables.length === 0 ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-500">
-            <p className="text-sm font-medium">No tables assigned to {currentZone} yet.</p>
-            <p className="text-xs text-slate-600 mt-1">Click &quot;Add Table&quot; above to place a new table here.</p>
-          </div>
-        ) : (
-          zoneTables.map((table) => (
-            <DraggableTable
-              key={table._id}
-              table={table}
-              onEdit={onEditTable}
-              onDelete={onDeleteTable}
-            />
-          ))
-        )}
+    <div className="space-y-2">
+      {/* Mobile Swipe Notice */}
+      <div className="lg:hidden flex items-center justify-center gap-1.5 text-[11px] text-amber-400 bg-amber-500/10 py-1.5 px-3 rounded-xl border border-amber-500/20 font-medium">
+        <MoveHorizontal className="w-3.5 h-3.5 animate-pulse" />
+        <span>Swipe horizontally to view full floor canvas</span>
       </div>
-    </DndContext>
+
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+        <div className="overflow-x-auto rounded-2xl border-2 border-slate-800 shadow-2xl backdrop-blur-xl bg-[#0c1322]">
+          <div className="relative min-w-[900px] w-full h-[650px]">
+            {/* Floor Blueprint Grid Background */}
+            <div
+              className="absolute inset-0 opacity-15 pointer-events-none"
+              style={{
+                backgroundImage: `radial-gradient(#f59e0b 1px, transparent 1px), radial-gradient(#38bdf8 1px, transparent 1px)`,
+                backgroundSize: '40px 40px',
+                backgroundPosition: '0 0, 20px 20px',
+              }}
+            />
+
+            {/* Zone Badge Overlay */}
+            <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-slate-900/90 border border-slate-700 px-3 py-1.5 rounded-xl shadow-lg">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+              <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
+                {currentZone} Floor Plan Canvas
+              </span>
+              <span className="text-xs text-slate-400">({zoneTables.length} Tables)</span>
+            </div>
+
+            {/* Legend */}
+            <div className="absolute top-4 right-4 z-20 hidden sm:flex items-center gap-3 bg-slate-900/90 border border-slate-700 px-3 py-1.5 rounded-xl text-xs text-slate-300">
+              <span className="flex items-center gap-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Available
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Reserved
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Occupied
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-slate-500" /> Maintenance
+              </span>
+            </div>
+
+            {/* Render Tables */}
+            {zoneTables.length === 0 ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-500">
+                <p className="text-sm font-medium">No tables assigned to {currentZone} yet.</p>
+                <p className="text-xs text-slate-600 mt-1">Click &quot;Add Table&quot; above to place a new table here.</p>
+              </div>
+            ) : (
+              zoneTables.map((table) => (
+                <DraggableTable
+                  key={table._id}
+                  table={table}
+                  onEdit={onEditTable}
+                  onDelete={onDeleteTable}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      </DndContext>
+    </div>
   );
 }
