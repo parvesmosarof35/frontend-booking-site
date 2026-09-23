@@ -153,8 +153,12 @@ export default function OrderPage() {
               <div>
                 <div className="relative h-56 overflow-hidden bg-slate-100">
                   <img
-                    src={item.imageUrl || 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800'}
+                    src={item.imageUrl || 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=800&auto=format&fit=crop&q=80'}
                     alt={item.name}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        'https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=800&auto=format&fit=crop&q=80';
+                    }}
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                   />
                   <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow-xs">

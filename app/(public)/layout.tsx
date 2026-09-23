@@ -10,12 +10,16 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col bg-[#fafaf9] text-slate-900">
-      <OffersBanner />
-      <Navbar />
-      <main className="flex-1 pb-16 sm:pb-0">{children}</main>
-      <Footer />
-      <MobileBottomNav />
+    <div className="min-h-screen flex flex-col bg-[#fafaf9] text-slate-900 print:bg-white print:p-0">
+      <div className="print:hidden">
+        <OffersBanner />
+        <Navbar />
+      </div>
+      <main className="flex-1 pb-16 sm:pb-0 print:pb-0 print:m-0">{children}</main>
+      <div className="print:hidden">
+        <Footer />
+        <MobileBottomNav />
+      </div>
     </div>
   );
 }

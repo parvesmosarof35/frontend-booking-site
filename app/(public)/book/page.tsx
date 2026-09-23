@@ -195,9 +195,9 @@ function BookingWizard() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10 print:py-0 print:px-0 print:max-w-none print:space-y-0">
       {/* Page Header */}
-      <div className="text-center space-y-3">
+      <div className="text-center space-y-3 print:hidden">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold uppercase tracking-wider">
           <Sparkles className="w-3.5 h-3.5 text-amber-600" />
           <span>Interactive 2D Floor Seating</span>
@@ -211,7 +211,7 @@ function BookingWizard() {
       </div>
 
       {/* Wizard Progress Steps (Light Mode) */}
-      <div className="grid grid-cols-4 gap-2 border-b border-slate-200 pb-4 text-xs font-bold">
+      <div className="grid grid-cols-4 gap-2 border-b border-slate-200 pb-4 text-xs font-bold print:hidden">
         <div
           className={`flex items-center gap-2 ${
             step >= 1 ? 'text-amber-700' : 'text-slate-400'
@@ -624,7 +624,7 @@ function BookingWizard() {
           <ReservationPass booking={confirmedBooking} />
 
           {/* Quick WhatsApp Action & Rebook */}
-          <div className="max-w-md mx-auto flex flex-col sm:flex-row gap-3 pt-4">
+          <div className="max-w-md mx-auto flex flex-col sm:flex-row gap-3 pt-4 print:hidden">
             <a
               href={`https://wa.me/8801712345678?text=Hello%20The%20Royal%20Grand%20Bistro,%20I%20have%20confirmed%20reservation%20${confirmedBooking.bookingReference}%20for%20${confirmedBooking.date}%20at%20${confirmedBooking.slotId?.startTime}`}
               target="_blank"

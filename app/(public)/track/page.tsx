@@ -106,9 +106,9 @@ function TrackContent() {
   }, [data, resultType]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10 print:py-0 print:px-0 print:max-w-none print:space-y-0">
       {/* Header */}
-      <div className="text-center space-y-3">
+      <div className="text-center space-y-3 print:hidden">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold uppercase tracking-wider">
           <Sparkles className="w-3.5 h-3.5 text-amber-600" />
           <span>Real-Time Status & Live Stepper</span>
@@ -122,7 +122,7 @@ function TrackContent() {
       </div>
 
       {/* Lookup Bar */}
-      <div className="bg-white border border-slate-200 rounded-3xl p-4 sm:p-6 shadow-sm">
+      <div className="bg-white border border-slate-200 rounded-3xl p-4 sm:p-6 shadow-sm print:hidden">
         <form
           onSubmit={(e) => {
             e.preventDefault();
