@@ -23,7 +23,12 @@ import {
   X,
   Layers,
   Clock,
+  Bell,
+  Volume2,
 } from 'lucide-react';
+import { getSocket } from '@/lib/socket';
+import { playNotificationChime } from '@/lib/sound';
+import toast from 'react-hot-toast';
 
 export default function AdminLayout({
   children,
@@ -47,6 +52,77 @@ export default function AdminLayout({
       }
     }
   }, [auth.isAuthenticated, isLoginPage, router]);
+
+  // Real-time notification chime listener for Admin & Kitchen
+  useEffect(() => {
+    if (isLoginPage) return;
+
+    const socket = getSocket();
+
+    const handleNewBooking = (booking: any) => {
+      playNotificationChime();
+      toast.custom((t) => (
+        <div
+          className={`${
+            t.visible ? 'animate-enter' : 'animate-leave'
+          } max-w-md w-full bg-slate-900 border-2 border-amber-400 shadow-2xl rounded-2xl pointer-events-auto flex p-4`}
+        >
+          <div className="flex-1 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">
+              <CalendarCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                🔔 New Reservation Received!
+              </p>
+              <p className="text-xs font-semibold text-white">
+                {booking.customerName} • {booking.guestCount} Guests
+              </p>
+              <p className="text-[10px] text-slate-400">
+                Ref: {booking.bookingReference} ({booking.date})
+              </p>
+            </div>
+          </div>
+        </div>
+      ), { duration: 6000 });
+    };
+
+    const handleNewOrder = (order: any) => {
+      playNotificationChime();
+      toast.custom((t) => (
+        <div
+          className={`${
+            t.visible ? 'animate-enter' : 'animate-leave'
+          } max-w-md w-full bg-slate-900 border-2 border-emerald-400 shadow-2xl rounded-2xl pointer-events-auto flex p-4`}
+        >
+          <div className="flex-1 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-400 text-slate-950 flex items-center justify-center font-bold">
+              <ShoppingBag className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                🔔 New Food Order Received!
+              </p>
+              <p className="text-xs font-semibold text-white">
+                Order #{order.orderNumber} • ${Number(order.totalAmount || 0).toFixed(2)}
+              </p>
+              <p className="text-[10px] text-slate-400">
+                {order.customerName} ({order.type})
+              </p>
+            </div>
+          </div>
+        </div>
+      ), { duration: 6000 });
+    };
+
+    socket.on('booking_created', handleNewBooking);
+    socket.on('order_created', handleNewOrder);
+
+    return () => {
+      socket.off('booking_created', handleNewBooking);
+      socket.off('order_created', handleNewOrder);
+    };
+  }, [isLoginPage]);
 
   if (isLoginPage) {
     return <div className="min-h-screen bg-[#070b14]">{children}</div>;

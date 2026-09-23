@@ -15,15 +15,20 @@ import {
   MessageSquare,
   ShieldCheck,
   Calendar,
+  Layers,
+  Sparkle,
+  Compass,
 } from 'lucide-react';
 import api from '@/lib/axios';
 import { trackEvent } from '@/lib/analytics';
 import toast from 'react-hot-toast';
+import VisualFloorPicker, { VisualTable } from '@/components/booking/VisualFloorPicker';
+import ReservationPass from '@/components/booking/ReservationPass';
 
 function BookingWizard() {
   const searchParams = useSearchParams();
 
-  // Booking Flow Steps: 1 -> Date & Shift, 2 -> Slot & Party Size, 3 -> Review & Hold, 4 -> Confirmed
+  // Booking Flow Steps: 1 -> Date & Shift, 2 -> Slot & Table, 3 -> Review & Hold, 4 -> Confirmed
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 
   // Data states
@@ -43,6 +48,8 @@ function BookingWizard() {
     parseInt(searchParams.get('guests') || '2', 10),
   );
   const [preferredZone, setPreferredZone] = useState<string>('Indoor');
+  const [selectionMode, setSelectionMode] = useState<'auto' | 'map'>('map');
+  const [selectedTable, setSelectedTable] = useState<VisualTable | null>(null);
 
   // Hold session state
   const [heldBooking, setHeldBooking] = useState<any>(null);
@@ -60,12 +67,15 @@ function BookingWizard() {
   useEffect(() => {
     trackEvent('view', 'page', 'booking_page');
 
-    api.get('/shifts').then((res) => {
-      setShifts(res.data || []);
-      if (!selectedShift && res.data?.length > 0) {
-        setSelectedShift(res.data[0]._id);
-      }
-    }).catch(() => {});
+    api
+      .get('/shifts')
+      .then((res) => {
+        setShifts(res.data || []);
+        if (!selectedShift && res.data?.length > 0) {
+          setSelectedShift(res.data[0]._id);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   // Fetch available slots whenever date or guest count changes
@@ -73,7 +83,9 @@ function BookingWizard() {
     if (selectedDate && guestCount) {
       setLoadingSlots(true);
       api
-        .get(`/bookings/available-slots?date=${selectedDate}&guestCount=${guestCount}&zone=${preferredZone}`)
+        .get(
+          `/bookings/available-slots?date=${selectedDate}&guestCount=${guestCount}&zone=${preferredZone}`,
+        )
         .then((res) => {
           setAvailableSlots(res.data || []);
           if (res.data?.length > 0 && !selectedSlot) {
@@ -117,13 +129,15 @@ function BookingWizard() {
         date: selectedDate,
         slotId: selectedSlot.slotId,
         guestCount,
+        tableId: selectedTable?._id,
       });
 
       const { data } = await api.post('/bookings/hold', {
         date: selectedDate,
         slotId: selectedSlot.slotId,
         guestCount,
-        preferredZone,
+        preferredZone: selectedTable?.zone || preferredZone,
+        tableId: selectedTable?._id || undefined,
         customerName: customerName || 'Guest',
         whatsapp: whatsapp || '',
       });
@@ -131,7 +145,11 @@ function BookingWizard() {
       setHeldBooking(data);
       setHoldTimeLeft(300); // 5 minutes
       setStep(3);
-      toast.success('Table temporarily held for 5 minutes!');
+      toast.success(
+        selectedTable
+          ? `Table ${selectedTable.tableNumber} held for you!`
+          : 'Table temporarily held for 5 minutes!',
+      );
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Selected slot or table is unavailable');
     } finally {
@@ -182,13 +200,13 @@ function BookingWizard() {
       <div className="text-center space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold uppercase tracking-wider">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Real-Time Seating Allocation</span>
+          <span>Cinema-Style 2D Seat & Table Picker</span>
         </div>
         <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
           Reserve Your Table
         </h1>
         <p className="text-sm text-slate-400 max-w-lg mx-auto">
-          Choose your dining schedule and let our smart layout engine allocate the ideal table configuration for your party size.
+          Choose your favorite spot—window side, rooftop skyline, or VIP lounge—with real-time seating allocation.
         </p>
       </div>
 
@@ -212,7 +230,7 @@ function BookingWizard() {
           <span className="w-6 h-6 rounded-full bg-slate-900 border border-current flex items-center justify-center text-xs">
             2
           </span>
-          <span className="hidden sm:inline">Slot & Party</span>
+          <span className="hidden sm:inline">Slot & Table</span>
         </div>
         <div
           className={`flex items-center gap-2 ${
@@ -232,7 +250,7 @@ function BookingWizard() {
           <span className="w-6 h-6 rounded-full bg-slate-900 border border-current flex items-center justify-center text-xs">
             4
           </span>
-          <span className="hidden sm:inline">Confirmed</span>
+          <span className="hidden sm:inline">VIP Pass</span>
         </div>
       </div>
 
@@ -290,14 +308,14 @@ function BookingWizard() {
               onClick={() => setStep(2)}
               className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm rounded-xl transition shadow-lg flex items-center gap-2"
             >
-              <span>Next: Select Slot & Party Size</span>
+              <span>Next: Select Slot & Floor Plan</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
       )}
 
-      {/* STEP 2: SLOT, GUESTS & ZONE PREFERENCE */}
+      {/* STEP 2: SLOT, GUESTS & INTERACTIVE FLOOR SEAT PICKER */}
       {step === 2 && (
         <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-8 backdrop-blur-xl shadow-2xl">
           {/* Guest Count */}
@@ -311,7 +329,10 @@ function BookingWizard() {
                 <button
                   key={num}
                   type="button"
-                  onClick={() => setGuestCount(num)}
+                  onClick={() => {
+                    setGuestCount(num);
+                    setSelectedTable(null);
+                  }}
                   className={`py-3 rounded-xl font-bold text-sm border transition ${
                     guestCount === num
                       ? 'bg-amber-400 text-slate-950 border-amber-400 shadow-md'
@@ -319,30 +340,6 @@ function BookingWizard() {
                   }`}
                 >
                   {num} {num === 1 ? 'Solo' : 'P'}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Preferred Zone */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-amber-400" />
-              <span>Preferred Dining Zone</span>
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {['Indoor', 'Outdoor', 'Rooftop', 'VIP'].map((zone) => (
-                <button
-                  key={zone}
-                  type="button"
-                  onClick={() => setPreferredZone(zone)}
-                  className={`py-3 px-4 rounded-xl font-semibold text-xs border text-center transition ${
-                    preferredZone === zone
-                      ? 'bg-amber-500/15 border-amber-400 text-amber-300'
-                      : 'bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-700'
-                  }`}
-                >
-                  {zone}
                 </button>
               ))}
             </div>
@@ -362,7 +359,9 @@ function BookingWizard() {
             ) : availableSlots.length === 0 ? (
               <div className="p-6 bg-rose-950/30 border border-rose-800/40 rounded-2xl text-rose-300 text-xs flex items-center gap-3">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                <span>No available tables for {guestCount} guests on this date. Please try another date or party size.</span>
+                <span>
+                  No available tables for {guestCount} guests on this date. Please try another date or party size.
+                </span>
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -371,7 +370,10 @@ function BookingWizard() {
                     key={slot.slotId}
                     type="button"
                     disabled={!slot.available}
-                    onClick={() => setSelectedSlot(slot)}
+                    onClick={() => {
+                      setSelectedSlot(slot);
+                      setSelectedTable(null);
+                    }}
                     className={`p-3.5 rounded-2xl border text-center transition flex flex-col items-center justify-center space-y-1 ${
                       !slot.available
                         ? 'bg-slate-950/40 border-slate-900 text-slate-600 opacity-40 cursor-not-allowed'
@@ -380,7 +382,9 @@ function BookingWizard() {
                         : 'bg-slate-950 text-slate-200 border-slate-800 hover:border-slate-700'
                     }`}
                   >
-                    <span className="font-mono text-sm font-semibold">{slot.startTime} - {slot.endTime}</span>
+                    <span className="font-mono text-sm font-semibold">
+                      {slot.startTime} - {slot.endTime}
+                    </span>
                     <span className="text-[10px] opacity-80">
                       {slot.available ? `${slot.availableTablesCount} table(s) open` : 'Fully Booked'}
                     </span>
@@ -389,6 +393,97 @@ function BookingWizard() {
               </div>
             )}
           </div>
+
+          {/* Table Selection Strategy Switcher */}
+          {selectedSlot && (
+            <div className="space-y-4 pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                <div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <Compass className="w-5 h-5 text-amber-400" />
+                    <span>Seating Preference</span>
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Choose between interactive 2D floor seat selection or automated smart allocation.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setSelectionMode('map')}
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+                      selectionMode === 'map'
+                        ? 'bg-amber-400 text-slate-950 shadow'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5" /> 2D Floor Map
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectionMode('auto');
+                      setSelectedTable(null);
+                    }}
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+                      selectionMode === 'auto'
+                        ? 'bg-amber-400 text-slate-950 shadow'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Sparkle className="w-3.5 h-3.5" /> Smart Auto-Assign
+                  </button>
+                </div>
+              </div>
+
+              {selectionMode === 'map' ? (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-amber-400 font-semibold">
+                      Click your favorite green table on the 2D layout below:
+                    </span>
+                    {selectedTable && (
+                      <span className="text-xs px-3 py-1 bg-amber-400 text-slate-950 rounded-full font-bold shadow animate-bounce">
+                        Selected: Table {selectedTable.tableNumber} ({selectedTable.capacity}p, {selectedTable.zone})
+                      </span>
+                    )}
+                  </div>
+                  <VisualFloorPicker
+                    date={selectedDate}
+                    slotId={selectedSlot.slotId}
+                    guestCount={guestCount}
+                    selectedTableId={selectedTable?._id || null}
+                    onSelectTable={(tbl) => {
+                      setSelectedTable(tbl);
+                      toast.success(`Selected Table ${tbl.tableNumber} (${tbl.zone})`);
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <span className="text-xs font-semibold text-slate-300 block">
+                    Select Preferred Dining Zone (Auto-assigned to optimal table):
+                  </span>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {['Indoor', 'Outdoor', 'Rooftop', 'VIP'].map((zone) => (
+                      <button
+                        key={zone}
+                        type="button"
+                        onClick={() => setPreferredZone(zone)}
+                        className={`py-3 px-4 rounded-xl font-semibold text-xs border text-center transition ${
+                          preferredZone === zone
+                            ? 'bg-amber-500/15 border-amber-400 text-amber-300'
+                            : 'bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-700'
+                        }`}
+                      >
+                        {zone}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Navigation Buttons */}
           <div className="pt-4 flex items-center justify-between">
@@ -405,7 +500,7 @@ function BookingWizard() {
               onClick={handleHoldTable}
               className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm rounded-xl transition shadow-lg disabled:opacity-50 flex items-center gap-2"
             >
-              <span>{holdingLoading ? 'Allocating Table...' : 'Hold Table (5 Mins)'}</span>
+              <span>{holdingLoading ? 'Holding Seating...' : 'Hold & Proceed (5 Mins)'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -414,7 +509,10 @@ function BookingWizard() {
 
       {/* STEP 3: 5-MIN HOLD & GUEST DETAILS */}
       {step === 3 && heldBooking && (
-        <form onSubmit={handleConfirmBooking} className="bg-slate-900/80 border border-amber-500/30 rounded-3xl p-6 sm:p-8 space-y-8 backdrop-blur-xl shadow-2xl">
+        <form
+          onSubmit={handleConfirmBooking}
+          className="bg-slate-900/80 border border-amber-500/30 rounded-3xl p-6 sm:p-8 space-y-8 backdrop-blur-xl shadow-2xl"
+        >
           {/* Temporary Hold Alert Banner */}
           <div className="p-4 bg-amber-950/50 border border-amber-500/40 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -424,7 +522,8 @@ function BookingWizard() {
                   Table Temporarily Locked for You
                 </p>
                 <p className="text-xs text-slate-300">
-                  Assigned <strong className="text-amber-400">{heldBooking.table?.tableNumber}</strong> ({heldBooking.table?.capacity} Seats, {heldBooking.table?.zone})
+                  Assigned <strong className="text-amber-400">{heldBooking.table?.tableNumber}</strong> (
+                  {heldBooking.table?.capacity} Seats, {heldBooking.table?.zone})
                 </p>
               </div>
             </div>
@@ -457,7 +556,9 @@ function BookingWizard() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">WhatsApp Number *</label>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  WhatsApp Number *
+                </label>
                 <input
                   type="tel"
                   required
@@ -469,7 +570,9 @@ function BookingWizard() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Email Address (For Confirmation Copy)</label>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  Email Address (For Instant Pass Copy)
+                </label>
                 <input
                   type="email"
                   placeholder="e.g. guest@example.com"
@@ -480,7 +583,9 @@ function BookingWizard() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Special Occasion / Dietary Notes</label>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  Special Occasion / Dietary Notes
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Anniversary, high chair needed"
@@ -499,83 +604,40 @@ function BookingWizard() {
               onClick={() => setStep(2)}
               className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition flex items-center gap-1.5"
             >
-              <ArrowLeft className="w-4 h-4" /> Change Slot
+              <ArrowLeft className="w-4 h-4" /> Change Slot / Table
             </button>
             <button
               type="submit"
               disabled={confirmingLoading}
               className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm rounded-xl transition shadow-lg disabled:opacity-50 flex items-center gap-2"
             >
-              <span>{confirmingLoading ? 'Confirming...' : 'Confirm Table Reservation'}</span>
+              <span>{confirmingLoading ? 'Confirming...' : 'Confirm Reservation Pass'}</span>
               <CheckCircle2 className="w-4 h-4" />
             </button>
           </div>
         </form>
       )}
 
-      {/* STEP 4: CONFIRMED TICKET */}
+      {/* STEP 4: CONFIRMED VIP RESERVATION PASS */}
       {step === 4 && confirmedBooking && (
-        <div className="bg-slate-900/90 border border-emerald-500/40 rounded-3xl p-8 text-center space-y-6 shadow-2xl backdrop-blur-xl">
-          <div className="w-20 h-20 rounded-full bg-emerald-950 border-2 border-emerald-500 flex items-center justify-center mx-auto text-emerald-400 shadow-xl">
-            <CheckCircle2 className="w-12 h-12" />
-          </div>
+        <div className="space-y-6">
+          <ReservationPass booking={confirmedBooking} />
 
-          <div className="space-y-2">
-            <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
-              Reservation Confirmed
-            </span>
-            <h2 className="font-serif text-3xl font-bold text-white">
-              We look forward to welcoming you!
-            </h2>
-            <p className="text-xs text-slate-400">
-              Booking Reference: <strong className="text-amber-400 font-mono text-base">{confirmedBooking.bookingReference}</strong>
-            </p>
-          </div>
-
-          {/* Ticket Card */}
-          <div className="max-w-md mx-auto bg-slate-950 border border-slate-800 rounded-2xl p-6 text-left space-y-3 text-xs text-slate-300">
-            <div className="flex justify-between border-b border-slate-800 pb-2">
-              <span>Guest Name:</span>
-              <strong className="text-white">{confirmedBooking.customerName}</strong>
-            </div>
-            <div className="flex justify-between border-b border-slate-800 pb-2">
-              <span>WhatsApp:</span>
-              <strong className="text-white">{confirmedBooking.whatsapp}</strong>
-            </div>
-            <div className="flex justify-between border-b border-slate-800 pb-2">
-              <span>Date:</span>
-              <strong className="text-white">{confirmedBooking.date}</strong>
-            </div>
-            <div className="flex justify-between border-b border-slate-800 pb-2">
-              <span>Time Slot:</span>
-              <strong className="text-amber-400">
-                {confirmedBooking.slotId?.startTime} - {confirmedBooking.slotId?.endTime}
-              </strong>
-            </div>
-            <div className="flex justify-between border-b border-slate-800 pb-2">
-              <span>Table Assigned:</span>
-              <strong className="text-amber-400">{confirmedBooking.tableId?.tableNumber} ({confirmedBooking.tableId?.zone})</strong>
-            </div>
-            <div className="flex justify-between">
-              <span>Party Size:</span>
-              <strong className="text-white">{confirmedBooking.guestCount} Guests</strong>
-            </div>
-          </div>
-
-          {/* Quick WhatsApp Action */}
+          {/* Quick WhatsApp Action & Rebook */}
           <div className="max-w-md mx-auto flex flex-col sm:flex-row gap-3 pt-4">
             <a
               href={`https://wa.me/8801712345678?text=Hello%20The%20Royal%20Grand%20Bistro,%20I%20have%20confirmed%20reservation%20${confirmedBooking.bookingReference}%20for%20${confirmedBooking.date}%20at%20${confirmedBooking.slotId?.startTime}`}
               target="_blank"
               rel="noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition shadow"
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition shadow hover:scale-105"
             >
-              <MessageSquare className="w-4 h-4" /> Message Restaurant on WhatsApp
+              <MessageSquare className="w-4 h-4" /> WhatsApp Hostess
             </a>
             <button
               onClick={() => {
                 setStep(1);
                 setConfirmedBooking(null);
+                setSelectedTable(null);
               }}
               className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs rounded-xl transition"
             >
@@ -590,7 +652,13 @@ function BookingWizard() {
 
 export default function BookingPage() {
   return (
-    <Suspense fallback={<div className="py-20 text-center text-slate-500">Loading reservation portal...</div>}>
+    <Suspense
+      fallback={
+        <div className="py-20 text-center text-slate-500">
+          Loading reservation portal...
+        </div>
+      }
+    >
       <BookingWizard />
     </Suspense>
   );
