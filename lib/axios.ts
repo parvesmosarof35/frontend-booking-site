@@ -1,10 +1,15 @@
 import axios from 'axios';
 
+const DEFAULT_API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  'https://bookingplatfrom-backend-gyq1rh-a97459-2-24-82-111.sslip.io/api';
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5017/api',
+  baseURL: DEFAULT_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 api.interceptors.request.use(
@@ -33,7 +38,7 @@ api.interceptors.response.use(
           try {
             const user = JSON.parse(userStr);
             const { data } = await axios.post(
-              `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5017/api'}/auth/refresh`,
+              `${DEFAULT_API_URL}/auth/refresh`,
               { refreshToken, userId: user.id || user._id },
             );
             if (data.accessToken) {
