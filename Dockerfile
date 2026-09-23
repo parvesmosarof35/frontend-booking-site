@@ -12,6 +12,7 @@ RUN npm run build
 FROM node:20-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
+ENV PORT=5018
 
 COPY package*.json ./
 RUN npm ci --omit=dev
@@ -21,5 +22,5 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
-EXPOSE 3000
-CMD ["npm", "start"]
+EXPOSE 5018
+CMD ["npx", "next", "start", "-p", "5018"]
